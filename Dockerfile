@@ -1,5 +1,5 @@
-FROM ubuntu:12.04.5
-MAINTAINER Martin Yrjölä <martin.yrjola@gmail.com>
+FROM ubuntu:trusty
+MAINTAINER Martin Yrjölä <martin.yrjola@gmail.com> & Tobias Kaatz <info@kaatz.io>
 
 ENV DEBIAN_FRONTEND noninteractive
 
