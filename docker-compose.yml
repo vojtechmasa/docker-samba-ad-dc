@@ -1,11 +1,11 @@
 samba:
   image: 13yo/docker-samba-ad-dc
   container_name: samba
-  environment:
-    - SAMBA_REALM=rd.sz
-    - SAMBA_DOMAIN=rd
+#  environment:
+#    - SAMBA_REALM=rd.sz
+#    - SAMBA_DOMAIN=rd
   volumes:
     - /srv/samba/samba:/var/lib/samba
   dns: 127.0.0.1
 #  net: host
-#  privileged: true
+  privileged: true
