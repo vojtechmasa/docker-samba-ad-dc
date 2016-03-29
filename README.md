@@ -6,6 +6,7 @@ Run these commands to start the container
 ```
 docker build -t samba-ad-dc .
 docker run --privileged -v ${PWD}/samba:/var/lib/samba  -e "SAMBA_DOMAIN=samdom" -e "SAMBA_REALM=samdom.example.com" --name dc1 --dns 127.0.0.1 -d samba-ad-dc
+docker stop dc1 && docker rm dc1
 ```
 You can of course change the domain and realm to your liking.
 
@@ -14,6 +15,7 @@ password as well as other passwords by running `docker logs dc1 2>&1 | head -3`.
 
 One fast check to see that Kerberos talks with Samba:
 ```
+ssh root@172.17.0.2
 root@1779834e202b:~# kinit administrator@SMBDC1.EXAMPLE.COM
 Password for administrator@SMBDC1.EXAMPLE.COM:
 Warning: Your password will expire in 41 days on Thu Jul 10 19:36:55 2014

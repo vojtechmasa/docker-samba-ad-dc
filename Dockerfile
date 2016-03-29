@@ -3,6 +3,9 @@ MAINTAINER Martin Yrjölä <martin.yrjola@gmail.com> & Tobias Kaatz <info@kaatz.
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# Avoid ERROR: invoke-rc.d: policy-rc.d denied execution of start.
+RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
+
 VOLUME ["/var/lib/samba", "/etc/samba"]
 
 # Setup ssh and install supervisord
@@ -36,7 +39,7 @@ RUN mkdir -p /var/run/named
 RUN chown -R bind:bind /var/run/named
 
 # Install sssd for UNIX logins to AD
-RUN apt-get install -y sssd sssd-tools
+RUN apt-get install -y sssd sssd-tools libpam-sss libnss-sss libnss-ldap
 ADD sssd.conf /etc/sssd/sssd.conf
 RUN chmod 0600 /etc/sssd/sssd.conf
 
