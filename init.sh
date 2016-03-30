@@ -2,8 +2,8 @@
 
 set -e
 
-SAMBA_DOMAIN=${SAMBA_DOMAIN:-samdom}
-SAMBA_REALM=${SAMBA_REALM:-samdom.example.com}
+SAMBA_DOMAIN=${SAMBA_DOMAIN:-SAMDOM}
+SAMBA_REALM=${SAMBA_REALM:-SAMDOM.EXAMPLE.COM}
 
 if [[ $SAMBA_HOST_IP ]]; then
     SAMBA_HOST_IP="--host-ip=${SAMBA_HOST_IP}"
@@ -12,10 +12,10 @@ fi
 appSetup () {
     touch /etc/samba/.alreadysetup
 
-    # Generate passwords
-    ROOT_PASSWORD=$(pwgen -c -n -1 12)
-    SAMBA_ADMIN_PASSWORD=$(pwgen -cny 10 1)
-    export KERBEROS_PASSWORD=$(pwgen -cny 10 1)
+    # Generate passwords or re-use then from the environment
+    ROOT_PASSWORD=${ROOT_PASSWORD:-$(pwgen -c -n -1 12)}
+    SAMBA_ADMIN_PASSWORD=${SAMBA_ADMIN_PASSWORD:-$(pwgen -cny 10 1)}
+    export KERBEROS_PASSWORD=${KERBEROS_PASSWORD:-$(pwgen -cny 10 1)}
     echo "root:$ROOT_PASSWORD" | chpasswd
     echo Root password: $ROOT_PASSWORD
     echo Samba administrator password: $SAMBA_ADMIN_PASSWORD

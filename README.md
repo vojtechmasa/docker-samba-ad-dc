@@ -4,8 +4,10 @@ This repository is unmaintained. Check if one of the forks are up to date.
 
 Run these commands to build, start and stop the container
 ```
+sudo chmod 777 -R samba
 docker build -t samba-ad-dc .
 docker run --privileged -v ${PWD}/samba:/var/lib/samba  -e "SAMBA_DOMAIN=SAMDOM" -e "SAMBA_REALM=SAMDOM.EXAMPLE.COM" --name dc1 --dns 127.0.0.1 -d samba-ad-dc
+docker run --privileged -v ${PWD}/samba:/var/lib/samba  -e "SAMBA_DOMAIN=SAMDOM" -e "SAMBA_REALM=SAMDOM.EXAMPLE.COM" -e "ROOT_PASSWORD=Opoh6quoo5lu" -e "SAMBA_ADMIN_PASSWORD=Yi1se@i^h0" --name dc1 --dns 127.0.0.1 -d samba-ad-dc
 docker stop dc1 && docker rm dc1
 ```
 You can of course change the domain and realm to your liking.
@@ -17,11 +19,11 @@ One fast check to see that Kerberos talks with Samba:
 ```
 ssh root@172.17.0.2
 root@1779834e202b:~# kinit administrator@SAMDOM.EXAMPLE.COM
-Password for administrator@SMBDC1.EXAMPLE.COM:
+Password for administrator@SAMDOM.EXAMPLE.COM:
 Warning: Your password will expire in 41 days on Thu Jul 10 19:36:55 2014
 root@1779834e202b:~# klist
 Ticket cache: FILE:/tmp/krb5cc_0
-Default principal: administrator@SMBDC1.EXAMPLE.COM
+Default principal: administrator@SAMDOM.EXAMPLE.COM
 
 Valid starting     Expires            Service principal
 05/29/14 19:45:53  05/30/14 05:45:53  krbtgt/SAMDOM.EXAMPLE.COM@SAMDOM.EXAMPLE.COM
@@ -29,9 +31,9 @@ Valid starting     Expires            Service principal
 
 ```
 
-LDAP search:
+LDAP search within the container:
 ```
-ldapsearch -h 172.17.0.2 -b "DC=samdom,DC=example,DC=com" "(&(objectClass=user)(name=administrator))"
+ldapsearch -b "DC=samdom,DC=example,DC=com" "(&(objectClass=user)(name=administrator))"
 ```
 
 ## Redmine client
