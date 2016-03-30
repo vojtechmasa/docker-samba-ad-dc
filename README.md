@@ -41,6 +41,8 @@ LDAP search within the container:
 ldapsearch -b "DC=samdom,DC=example,DC=com" "(&(objectClass=user)(name=administrator))"
 ```
 
+Edit [custom.sh](custom.sh) to add custom logic executed at the and of supervisord. 
+
 ## Redmine client
 
 Now you can test Redmine ldap login to the host.

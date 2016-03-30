@@ -43,6 +43,11 @@ RUN apt-get install -y sssd sssd-tools libpam-sss libnss-sss libnss-ldap
 ADD sssd.conf /etc/sssd/sssd.conf
 RUN chmod 0600 /etc/sssd/sssd.conf
 
+# Add custom script
+ADD custom.sh /usr/local/bin/custom.sh
+RUN chmod +x /usr/local/bin/custom.sh
+
+# Add supervisord and init
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD init.sh /init.sh
 RUN chmod 755 /init.sh
