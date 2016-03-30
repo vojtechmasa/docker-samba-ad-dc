@@ -2,7 +2,7 @@
 
 This repository is unmaintained. Check if one of the forks are up to date.
 
-Run these commands to start the container
+Run these commands to build, start and stop the container
 ```
 docker build -t samba-ad-dc .
 docker run --privileged -v ${PWD}/samba:/var/lib/samba  -e "SAMBA_DOMAIN=SAMDOM" -e "SAMBA_REALM=SAMDOM.EXAMPLE.COM" --name dc1 --dns 127.0.0.1 -d samba-ad-dc
@@ -24,9 +24,14 @@ Ticket cache: FILE:/tmp/krb5cc_0
 Default principal: administrator@SMBDC1.EXAMPLE.COM
 
 Valid starting     Expires            Service principal
-05/29/14 19:45:53  05/30/14 05:45:53  krbtgt/SMBDC1.EXAMPLE.COM@SMBDC1.EXAMPLE.COM
+05/29/14 19:45:53  05/30/14 05:45:53  krbtgt/SAMDOM.EXAMPLE.COM@SAMDOM.EXAMPLE.COM
         renew until 05/30/14 19:45:43
 
+```
+
+LDAP search:
+```
+ldapsearch -h 172.17.0.2 -b "DC=samdom,DC=example,DC=com" "(&(objectClass=user)(name=administrator))"
 ```
 
 ## Redmine client
