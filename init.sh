@@ -12,7 +12,7 @@ fi
 appSetup () {
     touch /etc/samba/.alreadysetup
 
-    # Generate passwords or re-use then from the environment
+    # Generate passwords or re-use them from the environment
     ROOT_PASSWORD=${ROOT_PASSWORD:-$(pwgen -c -n -1 12)}
     SAMBA_ADMIN_PASSWORD=${SAMBA_ADMIN_PASSWORD:-$(pwgen -cny 10 1)}
     export KERBEROS_PASSWORD=${KERBEROS_PASSWORD:-$(pwgen -cny 10 1)}
