@@ -45,6 +45,7 @@ appHelp () {
 	echo "Available options:"
 	echo " app:start          - Starts all services needed for Samba AD DC"
 	echo " app:setup          - First time setup."
+	echo " app:setup_start    - First time setup and start."
 	echo " app:help           - Displays the help"
 	echo " [command]          - Execute the specified linux command eg. /bin/bash."
 }
@@ -55,6 +56,10 @@ case "$1" in
 		;;
 	app:setup)
 		appSetup
+		;;
+	app:setup_start)
+		appSetup
+		appStart
 		;;
 	app:help)
 		appHelp
