@@ -33,12 +33,11 @@ appSetup () {
     	cp /tmp/samba_certificate/myCert.pem /var/lib/samba/private/tls/myCert.pem
     	cp /tmp/samba_certificate/myKey.pem /var/lib/samba/private/tls/myKey.pem
     	chmod 600 /var/lib/samba/private/tls/myKey.pem
-    	sed -i "/\[global\]/a \
-    	tls enabled  = yes\n\
-    	tls keyfile  = tls/myKey.pem\n\
-    	tls certfile = tls/myCert.pem\n\
-    	tls cafile   = \
-    	" /etc/samba/smb.conf
+    	sed -i '/\[global\]/a \
+    	\ttls enabled  = yes\
+    	\ttls keyfile  = tls/myKey.pem\
+    	\ttls certfile = tls/myCert.pem\
+    	\ttls cafile   = ' /etc/samba/smb.conf
     fi
     # Create Kerberos database
     expect kdb5_util_create.expect
