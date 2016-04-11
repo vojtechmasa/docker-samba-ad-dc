@@ -43,6 +43,11 @@ RUN apt-get install -y sssd sssd-tools libpam-sss libnss-sss libnss-ldap
 ADD sssd.conf /etc/sssd/sssd.conf
 RUN chmod 0600 /etc/sssd/sssd.conf
 
+# Add SSL certificate
+RUN mkdir /tmp/samba_certificate
+ADD certificate/myCert.pem /tmp/samba_certificate/myCert.pem 
+ADD certificate/myKey.pem /tmp/samba_certificate/myKey.pem 
+
 # Add custom script
 ADD custom.sh /usr/local/bin/custom.sh
 RUN chmod +x /usr/local/bin/custom.sh
@@ -53,4 +58,4 @@ ADD init.sh /init.sh
 RUN chmod 755 /init.sh
 EXPOSE 22 53 389 88 135 139 138 445 464 3268 3269
 ENTRYPOINT ["/init.sh"]
-CMD ["app:setup_start"]
+CMD ["app:setup_start_ssl"]

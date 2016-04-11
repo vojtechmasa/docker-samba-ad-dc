@@ -27,6 +27,19 @@ appSetup () {
     samba-tool domain provision --use-rfc2307 --domain=$SAMBA_DOMAIN --realm=$SAMBA_REALM --server-role=dc\
       --dns-backend=BIND9_DLZ --adminpass=$SAMBA_ADMIN_PASSWORD $SAMBA_HOST_IP
     cp /var/lib/samba/private/krb5.conf /etc/krb5.conf
+    # Add SSL
+    if [ "$1" = true ] ; then
+    	mkdir -p /var/lib/samba/private/tls/
+    	cp /tmp/samba_certificate/myCert.pem /var/lib/samba/private/tls/myCert.pem
+    	cp /tmp/samba_certificate/myKey.pem /var/lib/samba/private/tls/myKey.pem
+    	chmod 600 /var/lib/samba/private/tls/myKey.pem
+    	sed -i "/\[global\]/a \
+    	tls enabled  = yes\n\
+    	tls keyfile  = tls/myKey.pem\n\
+    	tls certfile = tls/myCert.pem\n\
+    	tls cafile   = \
+    	" /etc/samba/smb.conf
+    fi
     # Create Kerberos database
     expect kdb5_util_create.expect
     # Export kerberos keytab for use with sssd
@@ -43,11 +56,12 @@ appStart () {
 
 appHelp () {
 	echo "Available options:"
-	echo " app:start          - Starts all services needed for Samba AD DC"
-	echo " app:setup          - First time setup."
-	echo " app:setup_start    - First time setup and start."
-	echo " app:help           - Displays the help"
-	echo " [command]          - Execute the specified linux command eg. /bin/bash."
+	echo " app:start          	- Starts all services needed for Samba AD DC"
+	echo " app:setup          	- First time setup."
+	echo " app:setup_start    	- First time setup and start."
+	echo " app:setup_start_ssl	- First time setup and start with ssl."
+	echo " app:help           	- Displays the help"
+	echo " [command]          	- Execute the specified linux command eg. /bin/bash."
 }
 
 case "$1" in
@@ -59,6 +73,10 @@ case "$1" in
 		;;
 	app:setup_start)
 		appSetup
+		appStart
+		;;
+	app:setup_start_ssl)
+		appSetup true
 		appStart
 		;;
 	app:help)
