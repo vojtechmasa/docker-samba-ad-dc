@@ -43,6 +43,14 @@ ldapsearch -b "DC=samdom,DC=example,DC=com" "(&(objectClass=user)(name=administr
 
 Edit [custom.sh](custom.sh) to add custom logic executed at the and of supervisord. 
 
+## Allow Insecure LDAP Authentication
+
+Simple auth via LDAP fails if you have an unencrypted connection ("BindSimple: Transport encryption required").
+
+For debugging purposes, you can avoid this error by setting the LDAP_ALLOW_INSECURE environment variable to true.
+
+DO NOT USE LDAP_ALLOW_INSECURE IN PRODUCTION!
+
 ## Redmine client
 
 Now you can test Redmine ldap login to the host.
