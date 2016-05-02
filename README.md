@@ -104,7 +104,7 @@ Port usage: https://wiki.samba.org/index.php/Samba_port_usage
 ## Port forwarding command
 If you want the DC to be reachable through the host's IP you can start the container with this command:
 ```
-docker run --privileged -p 53:53 -p 53:53/udp -p 88:88 -p 88:88/udp -p 135:135 -p 137:137/udp -p 138:138/udp -p 139:139 -p 389:389 -p 389:389/udp -p 445:445 -p 464:464 -p 464:464/udp -p 636:636 -p 3268:3268 -p 3269:3269 -p 1024:1024 -p 1025:1025 -p 1026:1026 -p 1027:1027 -p 1028:1028 -p 1029:1029 -p 1030:1030 -p 1031:1031 -p 1032:1032 -p 1033:1033 -p 1034:1034 -p 1035:1035 -p 1036:1036 -p 1037:1037 -p 1038:1038 -p 1039:1039 -p 1040:1040 -p 1041:1041 -p 1042:1042 -p 1043:1043 -p 1044:1044 -v ${HOME}/dockervolumes/samba:/var/lib/samba  -e "SAMBA_DOMAIN=samdom" -e "SAMBA_REALM=samdom.example.com" -e "SAMBA_HOST_IP=$(hostname --all-ip-addresses |cut -f 1 -d' ')" --name samdom --dns 127.0.0.1 -d samba-ad-dc
+docker run --privileged -p 53:53 -p 53:53/udp -p 88:88 -p 88:88/udp -p 135:135 -p 137-138:137-138/udp -p 139:139 -p 389:389 -p 389:389/udp -p 445:445 -p 464:464 -p 464:464/udp -p 636:636 -p 1024-1044:1024-1044 -p 3268-3269:3268-3269 -v ${HOME}/dockervolumes/samba:/var/lib/samba  -e "SAMBA_DOMAIN=samdom" -e "SAMBA_REALM=samdom.example.com" -e "SAMBA_HOST_IP=$(hostname --all-ip-addresses |cut -f 1 -d' ')" --name samdom --dns 127.0.0.1 -d samba-ad-dc
 ```
 
 The problem is that the port range 1024 and upwards are used for dynamic RPC-calls, luckily Samba goes through them in
