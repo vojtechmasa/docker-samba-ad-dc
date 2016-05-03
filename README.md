@@ -92,6 +92,25 @@ Now log out and log in with the samba administrator credentials (username: admin
 I used [JXplorer](http://jxplorer.org/) to explore the LDAP-schema. To log in you need to input something like this:
 ![JXplorer example](http://i.imgur.com/LniIp22.png)
 
+## Samba as User Database for Alfresco
+
+For an example on how to use Samba as LDAP server with Alfresco, see the provided docker-compose file:
+
+```
+cd compose
+docker-compose up
+```
+
+Watch the Alfresco log:
+
+```
+docker exec -it alfresco bash
+tail -f /alfresco/tomcat/logs/catalina.out
+```
+
+Once Alfresco is up and running, you can log in at port 8080 as admin/admin or as one of the users created in
+the custom.sh file.
+
 ## Testing UNIX login with sssd
 
 ```
