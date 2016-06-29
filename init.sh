@@ -10,9 +10,13 @@ if [[ $SAMBA_HOST_IP ]]; then
     SAMBA_HOST_IP="--host-ip=${SAMBA_HOST_IP}"
 fi
 
-appSetup () {
-    touch /etc/samba/.alreadysetup
+SAMBA_CONF_BACKUP=/var/lib/samba/private/smb.conf
+SSSD_CONF_BACKUP=/var/lib/samba/private/sssd.conf
+KRBKEYTAP_CONF_BACKUP=/var/lib/samba/private/krb5.keytab
 
+appSetup () {
+    echo "Initializing samba database..."
+    
     # Generate passwords or re-use them from the environment
     ROOT_PASSWORD=${ROOT_PASSWORD:-$(pwgen -c -n -1 12)}
     SAMBA_ADMIN_PASSWORD=${SAMBA_ADMIN_PASSWORD:-$(pwgen -cny 10 1)}
@@ -41,12 +45,24 @@ appSetup () {
     if [ "${OMIT_EXPORT_KEY_TAB}" != "true" ]
     then
         samba-tool domain exportkeytab /etc/krb5.keytab --principal ${HOSTNAME}\$
+        cp /etc/krb5.keytab $KRBKEYTAP_CONF_BACKUP
     fi
     sed -i "s/SAMBA_REALM/${SAMBA_REALM}/" /etc/sssd/sssd.conf
+    
+    cp /etc/samba/smb.conf $SAMBA_CONF_BACKUP
+    cp /etc/sssd/sssd.conf $SSSD_CONF_BACKUP
 }
 
 appStart () {
-    [ -f /etc/samba/.alreadysetup ] && echo "Skipping setup..." || appSetup
+    if [ -f $SAMBA_CONF_BACKUP ]
+    then 
+        echo "Skipping setup and restore configurations..."
+        cp $SAMBA_CONF_BACKUP /etc/samba/smb.conf
+        cp $SSSD_CONF_BACKUP /etc/sssd/sssd.conf
+        [ -f $KRBKEYTAP_CONF_BACKUP ] && cp $KRBKEYTAP_CONF_BACKUP /etc/krb5.keytab
+    else
+        appSetup
+    fi
 
     # Start the services
     /usr/bin/supervisord
