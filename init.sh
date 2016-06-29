@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+
 set -e
 
 SAMBA_DOMAIN=${SAMBA_DOMAIN:-SAMDOM}
@@ -22,7 +22,7 @@ appSetup () {
     echo Samba administrator password: $SAMBA_ADMIN_PASSWORD
     echo Kerberos KDC database master key: $KERBEROS_PASSWORD
 
-    # Provision Sambac
+    # Provision Samba
     rm -f /etc/samba/smb.conf
     rm -rf /var/lib/samba/private/*
     samba-tool domain provision --use-rfc2307 --domain=$SAMBA_DOMAIN --realm=$SAMBA_REALM --server-role=dc\
