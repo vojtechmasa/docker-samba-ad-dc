@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 set -e
 
 SAMBA_DOMAIN=${SAMBA_DOMAIN:-SAMDOM}
@@ -22,7 +22,7 @@ appSetup () {
     echo Samba administrator password: $SAMBA_ADMIN_PASSWORD
     echo Kerberos KDC database master key: $KERBEROS_PASSWORD
 
-    # Provision Samba
+    # Provision Sambac
     rm -f /etc/samba/smb.conf
     rm -rf /var/lib/samba/private/*
     samba-tool domain provision --use-rfc2307 --domain=$SAMBA_DOMAIN --realm=$SAMBA_REALM --server-role=dc\
@@ -36,8 +36,12 @@ appSetup () {
 	fi
     # Create Kerberos database
     expect kdb5_util_create.expect
+    
     # Export kerberos keytab for use with sssd
-    samba-tool domain exportkeytab /etc/krb5.keytab --principal ${HOSTNAME}\$
+    if [ "${OMIT_EXPORT_KEY_TAB}" != "true" ]
+    then
+        samba-tool domain exportkeytab /etc/krb5.keytab --principal ${HOSTNAME}\$
+    fi
     sed -i "s/SAMBA_REALM/${SAMBA_REALM}/" /etc/sssd/sssd.conf
 }
 
