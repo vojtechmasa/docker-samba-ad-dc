@@ -53,4 +53,4 @@ ADD init.sh /init.sh
 RUN chmod 755 /init.sh
 EXPOSE 22 53 389 88 135 139 138 445 464 3268 3269
 ENTRYPOINT ["/init.sh"]
-CMD ["app:setup_start"]
+CMD ["app:start"]
