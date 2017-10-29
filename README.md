@@ -142,7 +142,7 @@ echo -n "-p $port:$port "; done;)` instead.
 ## TODO
 
 * [X] xattr and acl support for docker containers
-* [ ] NTP support
+* [X] NTP support
 * [ ] Try to join other Samba4 servers with a Samba4 DC
 * [ ] How to implement redundancy and fail-safes?
 * [X] Verify that Bind9 Dynamically Loadable Zones (DLZ) work

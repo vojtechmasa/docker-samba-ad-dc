@@ -25,7 +25,7 @@ RUN apt-get install -y build-essential libacl1-dev libattr1-dev \
       libblkid-dev libgnutls-dev libreadline-dev python-dev libpam0g-dev \
       python-dnspython gdb pkg-config libpopt-dev libldap2-dev \
       dnsutils libbsd-dev attr krb5-user docbook-xsl libcups2-dev acl python-xattr
-RUN apt-get install -y samba smbclient krb5-kdc
+RUN apt-get install -y samba smbclient krb5-kdc ntp
 
 # Install utilities needed for setup
 RUN apt-get install -y expect pwgen
@@ -52,5 +52,6 @@ ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD init.sh /init.sh
 RUN chmod 755 /init.sh
 EXPOSE 22 53 389 88 135 139 138 445 464 3268 3269
+EXPOSE 123/udp
 ENTRYPOINT ["/init.sh"]
 CMD ["app:start"]
