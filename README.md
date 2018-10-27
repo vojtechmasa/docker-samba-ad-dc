@@ -1,6 +1,6 @@
 # Docker container demonstrating Samba's Active Directory Domain Controller (AD DC) support
 
-This repository is unmaintained. Check if one of the forks are up to date.
+This repository is not maintained.
 
 Run these commands to build, start and stop the container
 ```
